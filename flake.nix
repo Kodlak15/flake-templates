@@ -13,7 +13,7 @@
   }:
     flake-parts.lib.mkFlake {inherit inputs;} {
       flake = let
-        # Get all of the directories within the current directory containing a flake.nix
+        # Get a list of all direct sub-directories within the root directory containing a flake.nix
         directories = builtins.attrNames (nixpkgs.lib.filterAttrs (k: v:
           builtins.pathExists (./. + "/${k}/flake.nix"))
         (builtins.readDir ./.));
