@@ -18,6 +18,8 @@
           builtins.pathExists (./. + "/${k}/flake.nix"))
         (builtins.readDir ./.));
       in {
+        # Create a template for each direct sub-directory containing a flake.nix
+        # The name of the template is the name of the associated sub-directory
         templates = builtins.listToAttrs (
           map (dir: {
             name = dir;
