@@ -14,16 +14,16 @@
     flake-parts.lib.mkFlake {inherit inputs;} {
       flake = let
         # Get a list of all direct sub-directories within the root directory containing a flake.nix
-        directories = builtins.attrNames (nixpkgs.lib.filterAttrs (k: v:
-          builtins.pathExists (./. + "/${k}/flake.nix"))
+        directories = builtins.attrNames (nixpkgs.lib.filterAttrs (name: _:
+          builtins.pathExists (./. + "/${name}/flake.nix"))
         (builtins.readDir ./.));
       in {
         # Create a template for each direct sub-directory containing a flake.nix
         # The name of the template is the name of the associated sub-directory
         templates = builtins.listToAttrs (
-          map (dir: {
-            name = dir;
-            value = {path = ./. + "/${dir}";};
+          map (name: {
+            name = name;
+            value = {path = ./. + "/${name}";};
           })
           directories
         );
