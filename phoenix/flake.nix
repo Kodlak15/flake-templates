@@ -17,13 +17,17 @@
         system,
         ...
       }: {
-        devShells.default = pkgs.mkShell {
-          packages = with pkgs; [
-            beamMinimal28Packages.elixir
-          ];
+        devShells.default = import ./nix/shells/default.nix {inherit pkgs;};
 
-          shellHook = ''
-            exec zsh -c zellij
+        packages = {
+          app-local-init = pkgs.writeShellScriptBin "app-local-init" ''
+            mix phx.server
+          '';
+          db-local-up = pkgs.writeShellScriptBin "db-local-up" ''
+            ${pkgs.docker}/bin/docker compose up db
+          '';
+          db-local-down = pkgs.writeShellScriptBin "db-local-down" ''
+            ${pkgs.docker}/bin/docker compose down db
           '';
         };
       };
